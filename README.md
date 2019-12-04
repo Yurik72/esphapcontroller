@@ -30,7 +30,8 @@ $ git clone https://github.com/Yurik72/esphapcontroller
 $ cd esphapcontroller
 $ make -C production/esp32/hapcontroller all
 ```
-! Note project already contains arduino esp libraries for idf and sdk configured
+! Project already contains arduino-esp libraries for esp-idf and sdk configured.
+
 Hovewer you can
 ```c
 $  make -C production/esp32/hapcontroller menuconfig
