@@ -74,6 +74,8 @@
 // Importnat due to iram limitation on ESp8266 (virtual function  table)
 //#define RF_SNIFFER
 //#define RGB
+
+#define DISABLE_WEATHERDISPLAY
 #define RF_RELAY
 
 #ifdef ESP8266

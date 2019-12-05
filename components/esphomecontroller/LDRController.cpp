@@ -6,7 +6,7 @@
 
 
 //REGISTER_CONTROLLER(LDRController)
-REGISTER_CONTROLLER_FACTORY(LDRController)
+//REGISTER_CONTROLLER_FACTORY(LDRController)
 
 const size_t bufferSize = JSON_OBJECT_SIZE(20);
 
@@ -19,6 +19,10 @@ LDRController::LDRController() {
 	this->pin = 0;
 	this->cvalmin = 0.0;
 	this->cvalmax = MAX_LDRVAL;
+#ifdef	ENABLE_NATIVE_HAP
+	this->ishap=true;
+	this->hapservice=NULL;
+#endif
 }
 String  LDRController::serializestate() {
 
@@ -125,3 +129,38 @@ bool LDRController::onpublishmqtt(String& endkey, String& payload) {
 	payload = String(this->get_state().ldrValue);
 	return true;
 }
+#ifdef	ENABLE_NATIVE_HAP
+
+void LDRController::setup_hap_service(){
+	DBG_OUTPUT_PORT.println("RelayController::setup_hap_service()");
+	if(!ishap)
+		return;
+	//this->hapservice=hap_add_lightbulb_service(this->get_name(),RelayController::hap_callback,this);
+
+}
+void LDRController::notify_hap(){
+	if(this->ishap && this->hapservice && this->hapservice->characteristics[0]){
+		LDRState newstate=this->get_state();
+		homekit_characteristic_t * ch= this->hapservice->characteristics[0];
+		if(ch){
+
+			if(ch->value.float_value!=newstate.ldrValue){
+				ch->value.float_value=newstate.ldrValue;
+			  homekit_characteristic_notify(ch,ch->value);
+			}
+		}
+	}
+}
+void LDRController::hap_callback(homekit_characteristic_t *ch, homekit_value_t value, void *context){
+//	DBG_OUTPUT_PORT.println("RelayController::hap_callback");
+//	DBG_OUTPUT_PORT.println(value.bool_value);
+//	if(context){
+//		RelayController* ctl= (RelayController*)context;
+////		RelayState newState=ctl->get_state();
+//		RelayCMD cmd = Set;
+//		newState.isOn=value.bool_value;
+//		ctl->AddCommand(newState, cmd, srcHAP);
+//	}
+}
+#endif
+

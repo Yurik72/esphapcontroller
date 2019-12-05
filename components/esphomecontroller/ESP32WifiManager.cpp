@@ -301,16 +301,29 @@ String ESP32WiFiManager::scanModal()
 void ESP32WiFiManager::scan()
 {
   if (!shouldscan) return;
-  return;
+
   DEBUG_WM(F("About to scan()"));
-  if (wifiSSIDscan)
-  {
-    delay(100);
-  }
+  DEBUG_WM(wifiSSIDscan);
+  delay(100);
+ // if (wifiSSIDscan)
+ // {
+ //   delay(100);
+//  }
 
   if (wifiSSIDscan)
   {
     int n = WiFi.scanNetworks();
+    if(n==WIFI_SCAN_RUNNING){
+    	delay(1000);
+    	n = WiFi.scanNetworks();
+    }
+    if(n==WIFI_SCAN_FAILED){
+    	WiFi.mode(WIFI_AP);
+    	delay(1000);
+    	n = WiFi.scanNetworks();
+    	delay(1000);
+    	WiFi.mode(WIFI_AP_STA);
+    }
     DEBUG_WM(F("Scan done"));
     if (n == 0) {
       DEBUG_WM(F("No networks found"));
@@ -519,6 +532,7 @@ boolean  ESP32WiFiManager::startConfigPortal(char const *apName, char const *apP
     if ( millis() > scannow + 10000)
     {
       DEBUG_WM(F("About to scan()"));
+      DEBUG_WM(wifiSSIDscan);
       shouldscan=true;  // since we are modal, we can scan every time
       scan();
       scannow= millis() ;

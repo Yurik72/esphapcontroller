@@ -20,7 +20,7 @@ extern "C"{
 #include <ArduinoJson.h>
 #include <WiFi.h>
 #include <esphap_config.h>
-#include "../../../../components/esphomecontroller/utilities.h"
+#include "utilities.h"
 //#include "wifi.h"
 
 

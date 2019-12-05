@@ -14,8 +14,11 @@ const size_t bufferSize = JSON_OBJECT_SIZE(20);
 RelayController::RelayController() {
 	this->isinvert = false;
 	this->pin = 0;
+
+#ifdef	ENABLE_NATIVE_HAP
 	this->ishap=true;
 	this->hapservice=NULL;
+#endif
 }
 String  RelayController::serializestate() {
 	

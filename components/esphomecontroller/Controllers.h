@@ -27,7 +27,7 @@
 #define DELAY_MS_RECONNECT 300000 //5 min
 //#include "BaseController.h"
 
-//class Triggers;
+class Triggers;
 class CBaseController;
 void init_hap_storage();
 void storage_changed(char * szstorage,int size);
@@ -59,7 +59,7 @@ private:
 	void loadconfig();
 	void checkandreconnectWifi();
 	
-	//Triggers& triggers;
+	Triggers& triggers;
 	long lastWifiReconnectms;
 	bool isConnectingMode;
 	bool isWifiConnected = true;

@@ -9,7 +9,7 @@
 
 #include "esphap_config.h"
 #include "Controllers.h"
-//#include "Triggers.h"
+#include "Triggers.h"
 #include "BaseController.h"
 
 
@@ -42,7 +42,7 @@ static Controllers* _instance=NULL;
 
 
 Controllers::Controllers()
-//:triggers(*(new Triggers()))
+:triggers(*(new Triggers()))
 {
 	_instance = this;
 	//globlog += "CTOR";
@@ -146,7 +146,7 @@ void Controllers::loadconfig() {
 		DBG_OUTPUT_PORT.println("File not found services.json");
 	}
 
-	//triggers.loadconfig();
+	triggers.loadconfig();
 }
 #if !defined ASYNC_WEBSERVER
 #if defined(ESP8266)
@@ -432,7 +432,7 @@ void Controllers::handleloops() {
 			ctl->run();
 			//if (!this->isWifiConnected)
 			//	this->checkandreconnectWifi();
-			/*
+
 			for (int j = 0;j < this->triggers.GetSize();j++) {
 				Trigger* tr = this->triggers.GetAt(j);
 
@@ -441,7 +441,7 @@ void Controllers::handleloops() {
 					tr->handleloop(ctl, this);
 				}
 			}
-			*/
+
 		}
 	}
 

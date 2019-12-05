@@ -25,6 +25,15 @@ REGISTER_CONTROLLER_FACTORY(RGBStripController)
 #include "RelayDimController.h"
 REGISTER_CONTROLLER_FACTORY(RelayDimController)
 #endif
+
+#ifndef DISABLE_THINGSPEAK
+#include "ThingSpeakClient.h"
+REGISTER_CONTROLLER_FACTORY(ThingSpeakController)
+#endif
+
+#include "LDRController.h"
+REGISTER_CONTROLLER_FACTORY(LDRController)
+
 //CSimpleArray<ControllerRecord*> Factories::ctlfactories;
 static CSimpleArray<ControllerRecord*>*   pctlfactories=NULL;
 static CSimpleArray<TriggerRecord*>* ptriggerfactories=NULL;
