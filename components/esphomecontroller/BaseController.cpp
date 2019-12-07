@@ -198,6 +198,8 @@ CBaseController::CBaseController() {
 	this->priority = 1;
 	this->isforcedinterval = false;
 	this->statemon = false;
+	this->accessory_type=1;
+	this->ishap=false;
 	
 #if defined(ESP8266)
 	this->pTicker = NULL;;
@@ -304,6 +306,10 @@ void CBaseController::loadconfigbase(JsonObject& json) {
 	statemon= json["statemon"];
 	loadif(repch, json, "repch");
 	loadif(ishap,json,"ishap");
+#ifdef	ENABLE_NATIVE_HAP
+	loadif(accessory_type,json,"acctype");
+
+#endif
 	interval= json["interval"].as<unsigned long>();
 	this->loadconfig(json);
 }

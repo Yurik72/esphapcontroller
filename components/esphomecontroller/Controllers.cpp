@@ -69,7 +69,7 @@ void Controllers::setup() {
 #ifdef	ENABLE_NATIVE_HAP
 	init_hap_storage();
     set_callback_storage_change(storage_changed);
-	hap_init_accessory(HOSTNAME,"Yurik72","0","EspHapCtl",VERSION);
+    hap_initbase_accessory_service(HOSTNAME,"Yurik72","0","EspHapCtl",VERSION);
 #endif
 	this->loadconfig();
 	connectmqtt();
@@ -86,7 +86,7 @@ void Controllers::setup() {
 	DBG_OUTPUT_PORT.println("Load services done ");
 #ifdef	ENABLE_NATIVE_HAP
 	DBG_OUTPUT_PORT.println("starting hap_init_homekit_server ");
-	hap_init_homekit_server();
+	hap_init_homekit_server(accessory_type);
 #endif
 }
 void Controllers::loadconfig() {

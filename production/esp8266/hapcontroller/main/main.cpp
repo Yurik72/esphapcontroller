@@ -16,9 +16,11 @@ extern "C"{
 //#include "homeintegration.h"
 }
 
+#include <esp8266.h>
 #include "Arduino.h"
 #include <ArduinoJson.h>
 #include <WiFi.h>
+
 #include <esphap_config.h>
 #include "utilities.h"
 //#include "wifi.h"
@@ -306,9 +308,6 @@ void startwifimanager() {
 		strcpy(mqtt_pass, hb_mqtt_pass.getValue());
 #endif
 		writeConfigFS(true);
-		delay(1000);
-		 ESP.restart();
-		 delay(1000);
 
 	}
 #else
@@ -324,9 +323,6 @@ void startwifimanager() {
 		strcpy(mqtt_pass, hb_mqtt_pass.getValue());
 #endif
 			writeConfigFS(true);
-			delay(1000);
-			 ESP.restart();
-			 delay(1000);
 	}
 #endif
 	if (!isAPMode) {

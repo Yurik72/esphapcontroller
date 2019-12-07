@@ -2027,6 +2027,7 @@ void homekit_server_on_get_accessories(client_context_t *context) {
     json_free(json);
 
     client_send_chunk(NULL, 0, context);
+    CLIENT_INFO(context, "client_send_chunk");
 }
 
 void homekit_server_on_get_characteristics(client_context_t *context) {

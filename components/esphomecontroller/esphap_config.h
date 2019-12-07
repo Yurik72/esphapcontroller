@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-#define HOMEKIT_SHORT_APPLE_UUIDS
+//#define HOMEKIT_SHORT_APPLE_UUIDS
 //#define ENABLE_HOMEBRIDGE    //if defined will communicate to MQTT Home bdridge
 #define ENABLE_NATIVE_HAP      //if defined will communicate Apple Home Kit with native protocols
 
@@ -131,6 +131,7 @@ extern short qossub ; // AMQTT can sub qos 0 or 1 or 2
 extern bool isOffline;
 extern bool isReboot;
 extern bool isAPMode;
+extern int accessory_type;
 extern  String globlog;
 
 #define VERSION "0.91"

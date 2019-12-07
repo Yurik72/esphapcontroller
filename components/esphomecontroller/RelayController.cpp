@@ -140,7 +140,13 @@ void RelayController::setup_hap_service(){
 	DBG_OUTPUT_PORT.println("RelayController::setup_hap_service()");
 	if(!ishap)
 		return;
-	this->hapservice=hap_add_lightbulb_service(this->get_name(),RelayController::hap_callback,this);
+	if(this->accessory_type>1){
+		this->hapservice=hap_add_lightbulb_service_as_accessory(this->accessory_type,this->get_name(),RelayController::hap_callback,this);
+	}
+	else{
+
+		this->hapservice=hap_add_lightbulb_service(this->get_name(),RelayController::hap_callback,this);
+	}
 
 }
 void RelayController::notify_hap(){

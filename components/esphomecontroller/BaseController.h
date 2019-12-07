@@ -265,6 +265,9 @@ protected:
 	short priority;
 	int repch = -1;
 	bool ishap=false;
+#ifdef	ENABLE_NATIVE_HAP
+	int accessory_type;
+#endif
 #if defined(ESP8266)
 	Ticker* pTicker;
 #endif

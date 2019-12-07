@@ -1129,7 +1129,7 @@ if (!isIp(req->uri)) {
    // AsyncWebServerResponse *response = request->beginResponse(302,"text/plain","");
 	httpd_resp_set_status(req,  "302");
 	httpd_resp_set_type(req, "text/plain");
-	String redir = String("http://") + String("192.168.1.4");
+	String redir = String("http://") + String("192.168.4.1");
 	httpd_resp_set_hdr(req, "Location", redir.c_str()); //todo
     //response->addHeader("Location", String("http://") + toStringIp(request->client()->localIP()));
 	return httpd_resp_send(req, "", 0);

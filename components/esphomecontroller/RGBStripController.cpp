@@ -699,7 +699,13 @@ void RGBStripController::set_state(RGBState state) {
 			double saturation = 0.0;
 			ColorToHSI(state.color, state.brightness, hue, saturation, intensity);
 			this->mqtt_hue = hue;
-			this->mqtt_saturation = saturation;
+
+			this->mqtt_saturation = saturation*100.0/255.0;
+
+			DBG_OUTPUT_PORT.print("set color hue");
+			DBG_OUTPUT_PORT.println(this->mqtt_hue);
+			DBG_OUTPUT_PORT.print("set color saturation");
+			DBG_OUTPUT_PORT.println(this->mqtt_saturation);
 		}
 		if (oldState.cmode != state.cmode) {
 			pStripWrapper->setColorMatrixMode(state.cmode);
@@ -924,19 +930,19 @@ void RGBStripController::notify_hap(){
 		DBG_OUTPUT_PORT.println("RGBStripController::notify_hap");
 
 		RGBState newState=this->get_state();
-		if(this->hap_on->value.bool_value!=newState.isOn){
+		if(this->hap_on && this->hap_on->value.bool_value!=newState.isOn){
 			this->hap_on->value.bool_value=newState.isOn;
 		  homekit_characteristic_notify(this->hap_on,this->hap_on->value);
 		}
-		if(this->hap_br->value.int_value !=newState.get_br_100()){
+		if(this->hap_br && this->hap_br->value.int_value !=newState.get_br_100()){
 			this->hap_br->value.int_value=newState.get_br_100();
 		  homekit_characteristic_notify(this->hap_br,this->hap_br->value);
 		}
-		if(this->hap_hue->value.float_value !=this->mqtt_hue){
+		if(this->hap_hue && this->hap_hue->value.float_value !=this->mqtt_hue){
 			this->hap_hue->value.float_value=this->mqtt_hue;
 		  homekit_characteristic_notify(this->hap_hue,this->hap_hue->value);
 		}
-		if(this->hap_saturation->value.float_value !=this->mqtt_saturation){
+		if(this->hap_saturation && this->hap_saturation->value.float_value !=this->mqtt_saturation){
 			this->hap_saturation->value.float_value=this->mqtt_saturation;
 		  homekit_characteristic_notify(this->hap_saturation,this->hap_saturation->value);
 		}
@@ -964,7 +970,7 @@ void RGBStripController::hap_callback(homekit_characteristic_t *ch, homekit_valu
 		}
 		if(ch==ctl->hap_hue && ch->value.float_value!=ctl->mqtt_hue){
 			ctl->mqtt_hue=ch->value.float_value;
-			newState.color = HSVColor(ctl->mqtt_hue, ctl->mqtt_saturation, newState.brightness);
+			newState.color = HSVColor(ctl->mqtt_hue, ctl->mqtt_saturation/100.0, 1.0);
 			cmd=SetColor;
 			isSet=true;
 			DBG_OUTPUT_PORT.println("HUE");
@@ -972,7 +978,7 @@ void RGBStripController::hap_callback(homekit_characteristic_t *ch, homekit_valu
 		}
 		if(ch==ctl->hap_saturation && ch->value.float_value!=ctl->mqtt_saturation){
 			ctl->mqtt_saturation=ch->value.float_value;
-			newState.color = HSVColor(ctl->mqtt_hue, ctl->mqtt_saturation, newState.brightness);
+			newState.color = HSVColor(ctl->mqtt_hue, ctl->mqtt_saturation/100.0,1.0);
 			cmd=SetColor;
 			isSet=true;
 			DBG_OUTPUT_PORT.println("Saturation");

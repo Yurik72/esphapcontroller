@@ -116,6 +116,9 @@ bool ICACHE_FLASH_ATTR readConfigFS() {
 					DBG_OUTPUT_PORT.println("Invalid load host name");
 
 				isOffline = json["offline"];
+
+				loadif(accessory_type, json, "acctype");
+
 #if defined ENABLE_HOMEBRIDGE
 				jsondata = json[name_mqtt_host];
 				if (jsondata && strlen(jsondata) > 0)

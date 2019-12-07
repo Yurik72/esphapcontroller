@@ -1,0 +1,16 @@
+
+full flash
+python /home/yurik/esp/esp-idf/components/esptool_py/esptool/esptool.py --chip esp32 --port COM3 --baud 115200 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 40m --flash_size detect 0xe000 /home/yurik/esp/esphapcontroller/production/esp32/hapcontroller/build/ota_data_initial.bin 0x1000 /home/yurik/esp/esphapcontroller/production/esp32/hapcontroller/build/bootloader/bootloader.bin 0x10000 /home/yurik/esp/esphapcontroller/production/esp32/hapcontroller/build/hapcontroller.bin 0x8000 /home/yurik/esp/esphapcontroller/production/esp32/hapcontroller/build/min_spiffs.bin
+
+only bin
+python /home/yurik/esp/esp-idf/components/esptool_py/esptool/esptool.py --chip esp32 --port COM3 --baud 115200 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 40m --flash_size detect 0xe000 /home/yurik/esp/esphapcontroller/production/esp32/hapcontroller/build/ota_data_initial.bin  0x10000 /home/yurik/esp/esphapcontroller/production/esp32/hapcontroller/build/hapcontroller.bin
+
+
+full min_spiffs
+
+python /home/yurik/esp/esp-idf/components/esptool_py/esptool/esptool.py --chip esp32 --port COM3 --baud 115200 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 40m --flash_size detect 0xe000 /home/yurik/esp/esphapcontroller/production/esp32/hapcontroller/build/ota_data_initial.bin 0x1000 /home/yurik/esp/esphapcontroller/production/esp32/hapcontroller/build/bootloader/bootloader.bin 0x10000 /home/yurik/esp/esphapcontroller/production/esp32/hapcontroller/build/hapcontroller.bin 0x8000 /home/yurik/esp/esphapcontroller/production/esp32/hapcontroller/build/min_spiffs.bin 
+
+
+min_spiffs only bin
+
+python /home/yurik/esp/esp-idf/components/esptool_py/esptool/esptool.py --chip esp32 --port COM3 --baud 115200 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 40m --flash_size detect 0xe000 /home/yurik/esp/esphapcontroller/production/esp32/hapcontroller/build/ota_data_initial.bin 0x1000  /home/yurik/esp/esphapcontroller/production/esp32/hapcontroller/build/hapcontroller.bin 
