@@ -141,7 +141,9 @@ void RelayController::setup_hap_service(){
 	if(!ishap)
 		return;
 	if(this->accessory_type>1){
+		DBG_OUTPUT_PORT.println("adding as new accessory");
 		this->hapservice=hap_add_lightbulb_service_as_accessory(this->accessory_type,this->get_name(),RelayController::hap_callback,this);
+		DBG_OUTPUT_PORT.println((int)this->hapservice);
 	}
 	else{
 

@@ -732,9 +732,9 @@ esp_err_t ESP32WiFiManager::handleRoot(httpd_req_t *req) {
   scannow= -1 ;
   DEBUG_WM(F("Handle root"));
 
-  //if (captivePortal(request)) { // If captive portal redirect instead of displaying the page.
- //   return;
- // }
+  if (captivePortal(req)) { // If captive portal redirect instead of displaying the page.
+    return ESP_OK;
+  }
 
   String page = FPSTR(WFM_HTTP_HEAD);
   page.replace("{v}", "Options");
@@ -1122,7 +1122,8 @@ return ESP_OK;
 /** Redirect to captive portal if we got a request for another domain. Return true in that case so the page handler do not try to handle the request again. */
 boolean ESP32WiFiManager::captivePortal(httpd_req_t *req) {
 
-
+	DEBUG_WM(F("start captivePortal"));
+	DEBUG_WM(req->uri);
 //  if (!isIp(request->host()) ) {
 if (!isIp(req->uri)) {
     DEBUG_WM(F("Request redirected to captive portal"));

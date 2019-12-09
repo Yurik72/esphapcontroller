@@ -1969,7 +1969,7 @@ void homekit_server_on_get_accessories(client_context_t *context) {
     int i=0;
     for (homekit_accessory_t **accessory_it = context->server->config->accessories; *accessory_it; accessory_it++) {
         homekit_accessory_t *accessory = *accessory_it;
-       // INFO("cycle %d",i);
+        INFO("cycle accessory %d",i);
         json_object_start(json);
 
         json_string(json, "aid"); json_integer(json, accessory->id);
@@ -1977,7 +1977,7 @@ void homekit_server_on_get_accessories(client_context_t *context) {
         int j=0;
         for (homekit_service_t **service_it = accessory->services; *service_it; service_it++) {
             homekit_service_t *service = *service_it;
-            //INFO("cycle services %d",j);
+            INFO("cycle services %d",j);
             json_object_start(json);
 
             json_string(json, "iid"); json_integer(json, service->id);
@@ -1996,7 +1996,7 @@ void homekit_server_on_get_accessories(client_context_t *context) {
             int k=0;
             for (homekit_characteristic_t **ch_it = service->characteristics; *ch_it; ch_it++) {
                 homekit_characteristic_t *ch = *ch_it;
-               // INFO("characteristic services %d",j);
+                INFO("characteristic services %d",j);
                 json_object_start(json);
                 write_characteristic_json(
                     json, context, ch,

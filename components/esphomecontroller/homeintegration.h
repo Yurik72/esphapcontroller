@@ -18,7 +18,7 @@ int hap_get_storage_size_ex();
 
 //esp controller usage
 int hap_initbase_accessory_service(const char* szname_value,const char* szmanufacturer,const char* szserialnumber,const char* szmodels,const char* szfirmware );
-homekit_service_t* hap_new_homekit_accessory_service();
+homekit_service_t* hap_new_homekit_accessory_service(const char *szname,const char *szserialnumber);
 typedef void(*hap_callback)(homekit_characteristic_t *ch, homekit_value_t value, void *context);
 homekit_service_t* hap_add_lightbulb_service(const char* szname,hap_callback cb,void* context);
 homekit_service_t* hap_new_lightbulb_service(const char* szname,hap_callback cb,void* context);
@@ -35,4 +35,6 @@ homekit_service_t* hap_new_light_service(const char* szname);
 
 homekit_service_t* hap_add_service(homekit_service_t* service );
 
-void hap_init_homekit_server(int acctype) ;
+void hap_setbase_accessorytype(int val);
+void hap_init_homekit_server() ;
+void hap_init_homekit_base_accessory();

@@ -69,6 +69,7 @@ void Controllers::setup() {
 #ifdef	ENABLE_NATIVE_HAP
 	init_hap_storage();
     set_callback_storage_change(storage_changed);
+    hap_setbase_accessorytype(accessory_type);
     hap_initbase_accessory_service(HOSTNAME,"Yurik72","0","EspHapCtl",VERSION);
 #endif
 	this->loadconfig();
@@ -86,7 +87,7 @@ void Controllers::setup() {
 	DBG_OUTPUT_PORT.println("Load services done ");
 #ifdef	ENABLE_NATIVE_HAP
 	DBG_OUTPUT_PORT.println("starting hap_init_homekit_server ");
-	hap_init_homekit_server(accessory_type);
+	hap_init_homekit_server();
 #endif
 }
 void Controllers::loadconfig() {
