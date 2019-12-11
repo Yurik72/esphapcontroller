@@ -22,12 +22,16 @@ homekit_service_t* hap_new_homekit_accessory_service(const char *szname,const ch
 typedef void(*hap_callback)(homekit_characteristic_t *ch, homekit_value_t value, void *context);
 homekit_service_t* hap_add_lightbulb_service(const char* szname,hap_callback cb,void* context);
 homekit_service_t* hap_new_lightbulb_service(const char* szname,hap_callback cb,void* context);
+homekit_service_t* hap_new_lightbulb_dim_service(const char* szname,hap_callback cb,void* context);
+homekit_service_t*  hap_add_relaydim_service_as_accessory(int acctype,const char* szname,hap_callback cb,void* context);
 homekit_service_t*  hap_add_lightbulb_service_as_accessory(int acctype,const char* szname,hap_callback cb,void* context);
 
 homekit_service_t* hap_add_rgbstrip_service(const char* szname,hap_callback cb,void* context);
-homekit_service_t* hap_add_relaydim_service(const char* szname,hap_callback cb,void* context,float minval,float maxval);
+homekit_service_t* hap_add_relaydim_service(const char* szname,hap_callback cb,void* context);
 homekit_service_t* hap_add_temperature_service(const char* szname);
 homekit_service_t* hap_add_humidity_service(const char* szname);
+homekit_service_t*  hap_add_temp_hum_as_accessory(int acctype,const char* szname,homekit_service_t** pp_temp,homekit_service_t** pp_hum);
+
 homekit_service_t* hap_add_pressure_service(const char* szname);
 
 homekit_service_t* hap_add_light_service(const char* szname);

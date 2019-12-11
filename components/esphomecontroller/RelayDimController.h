@@ -32,6 +32,12 @@ struct RelayDimState
 	bool isLdr = false;
 	int brightness = 0;
 	int ldrValue = 0;
+	int get_br_100(){
+		return map(brightness,0,0xFF,0,100);
+	}
+	void set_br_100(int val){
+		brightness= map(val,0,100,0,0xFF);
+	};
 };
 enum RelayDimCMD {
 	DimRelayOn = BaseOn,

@@ -282,16 +282,7 @@ int hap_initbase_accessory_service(const char* szname_value,const char* szmanufa
 	sz_acc_models=szmodels;
 	sz_acc_firmware=szfirmware;
 	hap_services[0]=hap_new_homekit_accessory_service(szname_value,szserialnumber);
-/*	hap_services[0]= NEW_HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]) {
-	        NEW_HOMEKIT_CHARACTERISTIC(NAME, szname_value),
-	        NEW_HOMEKIT_CHARACTERISTIC(MANUFACTURER, szmanufacturer),
-	        NEW_HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, szserialnumber),
-	        NEW_HOMEKIT_CHARACTERISTIC(MODEL, szmodels),
-	        NEW_HOMEKIT_CHARACTERISTIC(FIRMWARE_REVISION, szfirmware),
-	        NEW_HOMEKIT_CHARACTERISTIC(IDENTIFY, identify),
-	        NULL
-	    });
-*/
+
 	hap_mainservices_current=1;
 	INFO("hap init base accessory service , next %d",hap_mainservices_current);
 	return hap_mainservices_current;
@@ -322,29 +313,44 @@ homekit_service_t* hap_new_lightbulb_service(const char* szname,hap_callback cb,
 
 
 }
+homekit_service_t* hap_new_lightbulb_dim_service(const char* szname,hap_callback cb,void* context){
+
+	return NEW_HOMEKIT_SERVICE(LIGHTBULB, .primary = true,.characteristics=(homekit_characteristic_t*[]) {
+	            NEW_HOMEKIT_CHARACTERISTIC(NAME, szname),
+	            NEW_HOMEKIT_CHARACTERISTIC(
+	                ON, true,
+	                .callback=HOMEKIT_CHARACTERISTIC_CALLBACK(
+	                		cb, .context=context
+	                ),
+	            ),
+				NEW_HOMEKIT_CHARACTERISTIC(
+				  BRIGHTNESS, 100,
+				  .callback=HOMEKIT_CHARACTERISTIC_CALLBACK(
+				  	cb, .context=context
+				  	)
+				),
+	            NULL
+	        });
+
+
+}
 homekit_service_t* hap_add_lightbulb_service(const char* szname,hap_callback cb,void* context){
 
 	return hap_add_service(hap_new_lightbulb_service(szname,cb,context));
 }
 homekit_service_t*  hap_add_lightbulb_service_as_accessory(int acctype,const char* szname,hap_callback cb,void* context){
-	//if(hap_accessories[0] ==NULL){
-	//	INFO("main hap accesory is not initialized");
-	//	return NULL;
-	//}
 
 	homekit_service_t* baseservice=hap_new_homekit_accessory_service(szname,"0");
 	homekit_service_t* lbservice= hap_new_lightbulb_service(szname,cb,context);
 	homekit_service_t* svc[3];
-	svc[0]=hap_new_homekit_accessory_service(szname,"0");
-	svc[1]=hap_new_lightbulb_service(szname,cb,context);
+	svc[0]=baseservice;//hap_new_homekit_accessory_service(szname,"0");
+	svc[1]=lbservice;//hap_new_lightbulb_service(szname,cb,context);
 	svc[2]=NULL;
 	hap_accessories[hap_mainaccesories_current] = NEW_HOMEKIT_ACCESSORY(
 			.category=(homekit_accessory_category_t)acctype,
 			.services=svc
 							);
-//	INFO("base 0 %d",(int)baseservice);
-//	INFO("svc 0 %d",(int)hap_accessories[hap_mainaccesories_current]->services[0]);
-//	INFO("svc 1 %d",(int)hap_accessories[hap_mainaccesories_current]->services[1]);
+
 	hap_mainaccesories_current++;
     hap_accessories[hap_mainaccesories_current] = NULL;
     INFO("added light bulb as accessory , next accessory %d",hap_mainaccesories_current);
@@ -386,7 +392,7 @@ homekit_service_t* hap_add_rgbstrip_service(const char* szname,hap_callback cb,v
 	        });
 	return hap_add_service(service);
 }
-homekit_service_t* hap_add_relaydim_service(const char* szname,hap_callback cb,void* context,float minval,float maxval){
+homekit_service_t* hap_add_relaydim_service(const char* szname,hap_callback cb,void* context){
 
 	homekit_service_t*service=NEW_HOMEKIT_SERVICE(LIGHTBULB, .characteristics=(homekit_characteristic_t*[]) {
 	            NEW_HOMEKIT_CHARACTERISTIC(NAME, szname),
@@ -398,8 +404,6 @@ homekit_service_t* hap_add_relaydim_service(const char* szname,hap_callback cb,v
 					),
 					NEW_HOMEKIT_CHARACTERISTIC(
 					  BRIGHTNESS, 100,
-						.min_value= &minval,
-						.max_value=&maxval,
 					  .callback=HOMEKIT_CHARACTERISTIC_CALLBACK(
 					  	cb, .context=context
 
@@ -408,6 +412,24 @@ homekit_service_t* hap_add_relaydim_service(const char* szname,hap_callback cb,v
 	            NULL
 	        });
 	return hap_add_service(service);
+}
+homekit_service_t*  hap_add_relaydim_service_as_accessory(int acctype,const char* szname,hap_callback cb,void* context){
+
+	homekit_service_t* baseservice=hap_new_homekit_accessory_service(szname,"0");
+	homekit_service_t* lbservice= hap_new_lightbulb_dim_service(szname,cb,context);
+	homekit_service_t* svc[3];
+	svc[0]=baseservice;
+	svc[1]=lbservice;
+	svc[2]=NULL;
+	hap_accessories[hap_mainaccesories_current] = NEW_HOMEKIT_ACCESSORY(
+			.category=(homekit_accessory_category_t)acctype,
+			.services=svc
+							);
+
+	hap_mainaccesories_current++;
+    hap_accessories[hap_mainaccesories_current] = NULL;
+    INFO("added light bulb as accessory , next accessory %d",hap_mainaccesories_current);
+return lbservice;
 }
 homekit_service_t* hap_add_temperature_service(const char* szname){
 
@@ -426,6 +448,40 @@ homekit_service_t* hap_add_humidity_service(const char* szname){
 	            NULL
 	        });
 	return hap_add_service(service);
+}
+homekit_service_t*  hap_add_temp_hum_as_accessory(int acctype,const char* szname,homekit_service_t** pp_temp,homekit_service_t** pp_hum){
+
+	homekit_service_t* baseservice=hap_new_homekit_accessory_service(szname,"0");
+	homekit_service_t* temp=NEW_HOMEKIT_SERVICE(TEMPERATURE_SENSOR, .characteristics=(homekit_characteristic_t*[]) {
+        NEW_HOMEKIT_CHARACTERISTIC(NAME, szname),
+        NEW_HOMEKIT_CHARACTERISTIC(CURRENT_TEMPERATURE, 0),
+        NULL
+    });
+	homekit_service_t* hum= NEW_HOMEKIT_SERVICE(TEMPERATURE_SENSOR, .characteristics=(homekit_characteristic_t*[]) {
+        NEW_HOMEKIT_CHARACTERISTIC(NAME, szname),
+        NEW_HOMEKIT_CHARACTERISTIC(CURRENT_RELATIVE_HUMIDITY, 0),
+        NULL
+    });
+	homekit_service_t* svc[4];
+	svc[0]=baseservice;
+	svc[1]=temp;
+	svc[2]=hum;
+	svc[3]=NULL;
+	hap_accessories[hap_mainaccesories_current] = NEW_HOMEKIT_ACCESSORY(
+			.category=(homekit_accessory_category_t)acctype,
+			.services=svc
+							);
+
+	hap_mainaccesories_current++;
+    hap_accessories[hap_mainaccesories_current] = NULL;
+    INFO("add_temp_hum as accessory , next accessory %d",hap_mainaccesories_current);
+    if(pp_temp)
+    	*pp_temp=temp;
+    if(pp_hum)
+    	*pp_hum=hum;
+
+return temp;
+
 }
 homekit_service_t* hap_new_light_service(const char* szname){
 	return NEW_HOMEKIT_SERVICE(LIGHT_SENSOR, .characteristics=(homekit_characteristic_t*[]) {

@@ -381,29 +381,31 @@ void BME280Controller::directmeassure(BMEState& state) {
 
 void BME280Controller::setup_hap_service(){
 
+#ifdef  BMECONTROLLER_DEBUG
+	DBG_OUTPUT_PORT.println("BME280Controller::setup_hap_service()");
+#endif
 
-	DBG_OUTPUT_PORT.println("RGBStripController::setup_hap_service()");
 	if(!ishap)
 		return;
+	if(this->accessory_type>1){
+#ifdef  BMECONTROLLER_DEBUG
+			DBG_OUTPUT_PORT.println("BME280Controller adding as new accessory");
+#endif
+			hap_add_temp_hum_as_accessory(this->accessory_type,this->get_name(),&this->hapservice_temp,&this->hapservice_hum);
 
-
- //homekit_service_t* x= HOMEKIT_SERVICE(LIGHTBULB, .primary = true);
-	//homekit_characteristic_t * ch= NEW_HOMEKIT_CHARACTERISTIC(NAME, "x");
-	this->hapservice_temp=hap_add_temperature_service(this->get_name());
+		}
+	else{
+		this->hapservice_temp=hap_add_temperature_service(this->get_name());
+		this->hapservice_hum=hap_add_humidity_service(this->get_name());
+	}
 	if(this->hapservice_temp)
-		this->hap_temp=this->hapservice_temp->characteristics[0];
-
-	this->hapservice_hum=hap_add_humidity_service(this->get_name());
+		this->hap_temp=homekit_service_characteristic_by_type(this->hapservice_temp, HOMEKIT_CHARACTERISTIC_CURRENT_TEMPERATURE);
 	if(this->hapservice_hum)
-		this->hap_hum=this->hapservice_hum->characteristics[0];
+		this->hap_hum=homekit_service_characteristic_by_type(this->hapservice_hum, HOMEKIT_CHARACTERISTIC_CURRENT_RELATIVE_HUMIDITY);
 
-/*
-	this->hapservice=hap_add_rgbstrip_service(this->get_name(),RGBStripController::hap_callback,this);
-	this->hap_on=homekit_service_characteristic_by_type(this->hapservice, HOMEKIT_CHARACTERISTIC_ON);;
-	this->hap_br=homekit_service_characteristic_by_type(this->hapservice, HOMEKIT_CHARACTERISTIC_BRIGHTNESS);;
-	this->hap_hue=homekit_service_characteristic_by_type(this->hapservice, HOMEKIT_CHARACTERISTIC_HUE);;
-	this->hap_saturation=homekit_service_characteristic_by_type(this->hapservice, HOMEKIT_CHARACTERISTIC_SATURATION);;
-*/
+
+
+
 }
 void BME280Controller::notify_hap(){
 	if(this->ishap && this->hapservice_temp && this->hap_temp){

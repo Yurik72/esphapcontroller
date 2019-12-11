@@ -271,12 +271,16 @@ void RelayDimController::setup_hap_service(){
 	if(!ishap)
 		return;
 
+	if(this->accessory_type>1){
+		this->hapservice=hap_add_relaydim_service_as_accessory(this->accessory_type,this->get_name(),RelayDimController::hap_callback,this);
+	}
+	else
+	{
+		this->hapservice=hap_add_relaydim_service(this->get_name(),RelayDimController::hap_callback,this);
+	}
 
- //homekit_service_t* x= HOMEKIT_SERVICE(LIGHTBULB, .primary = true);
-	//homekit_characteristic_t * ch= NEW_HOMEKIT_CHARACTERISTIC(NAME, "x");
-
-	this->hapservice=hap_add_relaydim_service(this->get_name(),RelayDimController::hap_callback,this,DIM_MIN_VAL,DIM_MAX_VAL);
-	this->hap_on=homekit_service_characteristic_by_type(this->hapservice, HOMEKIT_CHARACTERISTIC_ON);;
+	this->hap_on=homekit_service_characteristic_by_type(this->hapservice, HOMEKIT_CHARACTERISTIC_ON);
+	this->hap_br=homekit_service_characteristic_by_type(this->hapservice, HOMEKIT_CHARACTERISTIC_BRIGHTNESS);
 }
 void RelayDimController::notify_hap(){
 	if(this->ishap && this->hapservice){
