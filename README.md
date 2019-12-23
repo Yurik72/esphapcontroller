@@ -43,7 +43,9 @@ and finally you can flash your esp
 $ make -C production/esp32/hapcontroller flash
 ```
 
+## For Arduino IDE and your own development
 
+please have a look [ESPHap](https://github.com/Yurik72/ESPHap) this is library to use native Apple integration allows to use Arduino IDE
 
 
 
